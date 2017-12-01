@@ -1,0 +1,99 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: keycloak-with-federated-openshift-auth-template
+objects:
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    annotations:
+      serviceaccounts.openshift.io/oauth-redirectreference.keycloak: >-
+        {"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"keycloak"}}
+    name: keycloak
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: keycloak
+      service: keycloak
+    name: keycloak
+  spec:
+    ports:
+      - name: web
+        port: 80
+        protocol: TCP
+        targetPort: 8080
+    selector:
+      app: keycloak
+      service: keycloak
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Route
+  metadata:
+    labels:
+      app: keycloak
+      service: keycloak
+    name: keycloak
+  spec:
+    port:
+      targetPort: web
+    to:
+      kind: Service
+      name: keycloak
+      weight: 100
+    wildcardPolicy: None
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    generation: 1
+    labels:
+      app: keycloak
+      name: keycloak
+      service: keycloak
+    name: keycloak
+  spec:
+    replicas: 1
+    selector:
+      app: keycloak
+      service: keycloak
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: keycloak
+          service: keycloak
+      spec:
+        containers:
+        - env:
+          - name: KEYCLOAK_USER
+            value: admin
+          - name: KEYCLOAK_PASSWORD
+            value: admin
+          image: 'docker.io/jboss/keycloak-openshift:3.4.0.Final'
+          imagePullPolicy: IfNotPresent
+          name: keycloak
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - type: ConfigChange
