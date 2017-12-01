@@ -79,7 +79,7 @@ objects:
           - name: KEYCLOAK_USER
             value: admin
           - name: KEYCLOAK_PASSWORD
-            value: admin
+            value: ${KEYCLOAK_PASSWORD}
           image: 'docker.io/jboss/keycloak-openshift:3.4.0.Final'
           imagePullPolicy: IfNotPresent
           name: keycloak
@@ -97,3 +97,8 @@ objects:
     test: false
     triggers:
     - type: ConfigChange
+parameters:
+- description: Password used for Keycloak admin user
+  from: '[A-Z0-9]{8}'
+  generate: expression
+  name: KEYCLOAK_PASSWORD
