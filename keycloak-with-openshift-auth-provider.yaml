@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Template
 metadata:
-  name: keycloak-with-federated-openshift-auth-template
+  name: keycloak-with-openshift-auth-provider-template
 objects:
 - apiVersion: v1
   kind: ServiceAccount
