@@ -35,7 +35,7 @@ oc env dc/keycloak --list | grep KEYCLOAK_PASSWORD
 
 ## Creating a new Realm
 
-The `admin` user will be signed in to the `master` realm. This user has full control over the Keycloak instance. We can create a dedicated realm for our OpenShift project and allow OpenShift users to administer the realm. Only users who can access our OpenShift project will be able to sign in to Keycloak.
+The `admin` user will be signed in to the `master` realm. This user has full control over the Keycloak instance. We can create a dedicated realm for our OpenShift project and allow OpenShift users to administer the realm. Only users who can access our OpenShift cluster will be able to sign in to Keycloak.
 
 Create a realm, and name it after our OpenShift Project.
 
