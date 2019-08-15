@@ -1,5 +1,7 @@
 # How to use your OpenShift credentials to sign into Keycloak
 
+**THIS IS FOR OPENSHIFT 3.X. FOR OPENSHIFT 4.X, A NEW IDENTITY PROVIDER IS REQUIRED IN KEYCLOAK. SEE https://github.com/slaskawi/KEYCLOAK-10169-OpenShift4-User-Provider FOR A PLUGIN THAT ADDS THIS AND https://issues.jboss.org/browse/KEYCLOAK-10169 FOR PROGRESS ON HAVING IT AS A DEFAULT PROVIDER IN KEYCLOAK**
+
 This article shows how to setup and configure a Keycloak instance to use OpenShift for authentication via Identity Brokering. This allows for Single Sign on between the OpenShift cluster and the Keycloak instance. The Keycloak instance will be running on the OpenShift cluster and leverage a ServiceAccount Oauth Client.
 
 ## Provisioning Keycloak to your OpenShift namespace
